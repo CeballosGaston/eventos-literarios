@@ -1,52 +1,53 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signIn, signOut, signUp } from "../services/authService";
-import { supabase } from "@/shared/lib/supabaseClient";
+import { toast } from "sonner";
+
+import { LoginInput, RegisterInput } from "../schemas/authSchema";
 
 export function useAuth() {
   const queryClient = useQueryClient();
 
-  const userQuery = useQuery({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const { data } = await supabase.auth.getUser();
-      return data.user;
-    },
-  });
-
   const login = useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      signIn(email, password),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+    mutationFn: ({ email, password }: LoginInput) => signIn(email, password),
+    onSuccess: (data) => {
+      queryClient.setQueryData(["user"], data.user);
+      toast.success("¡Bienvenido!");
+    },
+    onError: (error: unknown) => {
+      const message =
+        error instanceof Error ? error.message : "Error al iniciar sesión";
+      toast.error(message);
     },
   });
 
-const register = useMutation({
-  mutationFn: ({ email, password }: { email: string; password: string }) =>
-    signUp(email, password), 
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ["user"] });
-  },
-  
-});
+  const register = useMutation({
+    mutationFn: ({ email, password }: RegisterInput) => signUp(email, password),
+    onSuccess: () => {
+      toast.success("Registro completado. Revisa tu email.");
+    },
+    onError: (error: unknown) => {
+      const message =
+        error instanceof Error ? error.message : "Error en el registro";
+      toast.error(message);
+    },
+  });
 
   const logout = useMutation({
     mutationFn: signOut,
-
     onSuccess: () => {
       queryClient.setQueryData(["user"], null);
+
+      queryClient.removeQueries();
+      toast.success("Sesión cerrada");
+    },
+    onError: (error: unknown) => {
+      const message =
+        error instanceof Error ? error.message : "Error al cerrar sesión";
+      toast.error(message);
     },
   });
 
-  return {
-    user: userQuery.data,
-    isLoading: userQuery.isLoading,
-
-    login,
-    register,
-    logout,
-  };
+  return { login, register, logout };
 }
