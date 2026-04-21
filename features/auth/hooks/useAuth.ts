@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signIn, signOut, signUp } from "../services/authService";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
+import { supabase } from "@/shared/lib/supabaseClient";
 import { LoginInput, RegisterInput } from "../schemas/authSchema";
 
 export function useAuth() {
@@ -28,8 +28,11 @@ export function useAuth() {
 
   const register = useMutation({
     mutationFn: ({ email, password }: RegisterInput) => signUp(email, password),
-    onSuccess: () => {
-      toast.success("Registro completado. Revisa tu email.");
+    onSuccess: async () => {
+      await supabase.auth.signOut();
+      queryClient.clear();
+      toast.success("¡Cuenta creada con éxito! Ahora puedes iniciar sesión.");
+      router.push("/login");
     },
     onError: (error: unknown) => {
       const message =
