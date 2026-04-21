@@ -8,6 +8,12 @@ export async function middleware(request: NextRequest) {
     },
   });
 
+  const protectedRoutes = ["/dashboard"];
+
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route),
+  );
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -45,9 +51,9 @@ export async function middleware(request: NextRequest) {
   const isAuthPage =
     request.nextUrl.pathname.startsWith("/login") ||
     request.nextUrl.pathname.startsWith("/register");
-  const isDashboardPage = request.nextUrl.pathname.startsWith("/dashboard");
+  
 
-  if (!user && isDashboardPage) {
+  if (!user && isProtectedRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
