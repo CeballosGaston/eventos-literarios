@@ -8,12 +8,6 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  const protectedRoutes = ["/dashboard"];
-
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route),
-  );
-
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -25,18 +19,14 @@ export async function middleware(request: NextRequest) {
         set(name: string, value: string, options: CookieOptions) {
           request.cookies.set({ name, value, ...options });
           response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
+            request: { headers: request.headers },
           });
           response.cookies.set({ name, value, ...options });
         },
         remove(name: string, options: CookieOptions) {
           request.cookies.set({ name, value: "", ...options });
           response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
+            request: { headers: request.headers },
           });
           response.cookies.set({ name, value: "", ...options });
         },
@@ -44,21 +34,29 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+const { data: { session } } = await supabase.auth.getSession();
+const user = session?.user;
 
-  const isAuthPage =
-    request.nextUrl.pathname.startsWith("/login") ||
-    request.nextUrl.pathname.startsWith("/register");
+console.log("RUTA ACTUAL:", request.nextUrl.pathname);
+console.log("¿HAY USUARIO?:", !!user);
+
+  const pathname = request.nextUrl.pathname;
+
+ 
+  const isAuthPage = pathname.startsWith("/login") || pathname.startsWith("/register");
   
-
-  if (!user && isProtectedRoute) {
+  
+  //Luego agregaré algunas páginas públicas.
+  // const isPublicPage = false; 
+ 
+  if (!user && !isAuthPage) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  
   if (user && isAuthPage) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+   
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return response;

@@ -3,17 +3,21 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signIn, signOut, signUp } from "../services/authService";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { LoginInput, RegisterInput } from "../schemas/authSchema";
 
 export function useAuth() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const login = useMutation({
     mutationFn: ({ email, password }: LoginInput) => signIn(email, password),
     onSuccess: (data) => {
       queryClient.setQueryData(["user"], data.user);
       toast.success("¡Bienvenido!");
+      router.push("/");
+      router.refresh();
     },
     onError: (error: unknown) => {
       const message =
@@ -41,6 +45,8 @@ export function useAuth() {
 
       queryClient.removeQueries();
       toast.success("Sesión cerrada");
+      router.push("/login");
+      router.refresh();
     },
     onError: (error: unknown) => {
       const message =
