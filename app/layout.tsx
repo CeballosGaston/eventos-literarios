@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import './globals.css';
 import { Toaster } from "sonner";
+import { Navbar } from "@/shared/components/layout/Navbar";
 
 
 
@@ -17,10 +18,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body>
+      
+        
         <ReactQueryProvider>
-          {children}
+         <Navbar /> 
+          <main>
+            {children}
+          </main>
         </ReactQueryProvider>
         <Toaster richColors position="top-right" style={{ zIndex: 9999 }} />
+     
       </body>
     </html>
   )
