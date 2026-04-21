@@ -1,11 +1,17 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // 1. EXCLUSIÓN MANUAL INMEDIATA
+  // Si es login, register o un archivo estático, NI SIQUIERA inicializamos Supabase.
+  if (pathname.includes(".") || pathname.startsWith("/_next")) {
+    return NextResponse.next();
+  }
+
   let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+    request: { headers: request.headers },
   });
 
   const supabase = createServerClient(
@@ -34,36 +40,32 @@ export async function middleware(request: NextRequest) {
     },
   );
 
-const { data: { session } } = await supabase.auth.getSession();
-const user = session?.user;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-console.log("RUTA ACTUAL:", request.nextUrl.pathname);
-console.log("¿HAY USUARIO?:", !!user);
+  // 1. Definimos cuáles son las páginas de autenticación
+  const isAuthPage = pathname === "/login" || pathname === "/register";
 
-  const pathname = request.nextUrl.pathname;
-
- 
-  const isAuthPage = pathname.startsWith("/login") || pathname.startsWith("/register");
-  
-  
-  //Luego agregaré algunas páginas públicas.
-  // const isPublicPage = false; 
- 
+  // CASO A: Usuario NO logueado intentando entrar a zona privada
   if (!user && !isAuthPage) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
   }
 
-  
+  // CASO B: Usuario SÍ logueado intentando entrar a Login o Register (LO QUE BUSCAMOS)
   if (user && isAuthPage) {
-   
-    return NextResponse.redirect(new URL("/", request.url));
+    const url = request.nextUrl.clone();
+    url.pathname = "/"; // O a /dashboard si prefieres
+    return NextResponse.redirect(url);
   }
 
+  // Si no cae en ninguna de las anteriores, lo dejamos pasar
   return response;
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
+  // Matcher ultra-simple para que no interfiera con nada más
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
