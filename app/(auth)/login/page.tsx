@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import { BookOpen } from "lucide-react";
 
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -22,7 +20,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
-  const router = useRouter();
   const { login: loginMutation } = useAuth();
 
   const {
@@ -34,30 +31,8 @@ export default function LoginPage() {
     defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = async (data: LoginInput) => {
-    try {
-      await loginMutation.mutateAsync({
-        email: data.email,
-        password: data.password,
-      });
-
-      toast.success("¡Bienvenido de nuevo!");
-      router.push("/");
-    } catch (error) {
-      // 1. Verificamos si es un error con mensaje (estándar de JS)
-      if (error instanceof Error) {
-        const message =
-          error.message === "Invalid login credentials"
-            ? "Email o contraseña incorrectos"
-            : error.message;
-
-        toast.error(message);
-      }
-      // 2. Fallback por si acaso el error es algo extraño
-      else {
-        toast.error("Ocurrió un error inesperado");
-      }
-    }
+  const onSubmit = (data: LoginInput) => {
+    loginMutation.mutate(data);
   };
 
   return (

@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import { BookOpen } from "lucide-react";
 
 import { useAuth } from "@/features/auth/hooks/useAuth";
@@ -16,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const { register: signUpMutation } = useAuth();
 
   const {
@@ -28,26 +25,9 @@ export default function RegisterPage() {
     defaultValues: { email: "", password: "", confirmPassword: "" }
   });
 
-  const onSubmit = async (data: RegisterInput) => {
-    try {
-      await signUpMutation.mutateAsync({ 
-        email: data.email, 
-        password: data.password 
-      });
-      
-      toast.success("¡Cuenta creada! Revisa tu email si es necesario.");
-      router.push("/login");
-    } catch (error) {
-      // Manejo de errores sin 'any'
-      const errorMessage = error instanceof Error ? error.message : "Error al registrarse";
-      
-      // Traducción amigable de errores comunes de Supabase
-      const friendlyMessage = errorMessage.includes("User already registered")
-        ? "Este correo ya está registrado"
-        : errorMessage;
-
-      toast.error(friendlyMessage);
-    }
+  const onSubmit = (data: RegisterInput) => {
+   
+    signUpMutation.mutate(data);
   };
 
   return (
