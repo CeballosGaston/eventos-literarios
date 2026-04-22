@@ -2,11 +2,14 @@
 
 import { useQuery } from "@tanstack/react-query"
 import { getEvents } from "../services/eventService"
-import { EventItem } from "../types"
 
-export function useEvents() {
-  return useQuery<EventItem[]>({
-    queryKey: ["events"],
-    queryFn: getEvents,
+export function useEvents(filters?: {
+  type?: string
+  date?: string
+  zone?: string
+}) {
+  return useQuery({
+    queryKey: ["events", filters],
+    queryFn: () => getEvents(filters),
   })
 }
