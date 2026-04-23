@@ -1,11 +1,17 @@
-// app/(dashboard)/layout.tsx
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+"use client";
+
+import { useState } from "react";
+import { EventFilters } from "@/features/events/types";
+import { EventSidebar } from "./components/EventSidebar";
+import type { ReactNode } from "react";
+
+export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const [filters, setFilters] = useState<EventFilters>({});
+
   return (
     <div className="flex min-h-screen">
-      {/* Aquí podrías poner un Sidebar lateral pro en el futuro */}
-      <aside className="w-64 bg-slate-900 text-white p-4 hidden md:block">
-        Dashboard Menu
-      </aside>
+      <EventSidebar filters={filters} setFilters={setFilters} />
+
       <main className="flex-1 p-8 bg-slate-50">{children}</main>
     </div>
   );
