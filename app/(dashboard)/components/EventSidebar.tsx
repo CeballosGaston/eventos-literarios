@@ -1,18 +1,15 @@
 "use client";
 
-import { EventFilters } from "@/features/events/types";
+import {useFilters} from "../../../features/filters/context/FiltersContext";
+import { EventCategory } from "@/features/events/types";
 
-export function EventSidebar({
-  filters,
-  setFilters,
-}: {
-  filters: EventFilters;
-  setFilters: React.Dispatch<React.SetStateAction<EventFilters>>;
-}) {
+export function EventSidebar() {
+  const { filters, setFilters } = useFilters();
+  
+
   return (
     <aside className="w-72 bg-white border-r border-slate-200 p-4 flex flex-col gap-6">
       {/* HEADER */}
-
 
       {/* SEARCH */}
       <div className="flex flex-col gap-2">
@@ -34,7 +31,16 @@ export function EventSidebar({
       {/* TYPE */}
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Categorías</label>
-        <select className="p-2 rounded-md border border-slate-200 text-sm">
+        <select
+  className="p-2 rounded text-black"
+  value={filters?.type || ""}
+  onChange={(e) =>
+  setFilters((prev) => ({
+    ...prev,
+    type: (e.target.value || undefined) as EventCategory | undefined,
+  }))
+}
+>
           <option value="">Todos</option>
           <option value="charla">Charla</option>
           <option value="lectura">Lectura</option>

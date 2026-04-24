@@ -1,4 +1,4 @@
-export type EventType =
+export type EventCategory =
   | "charla"
   | "lectura"
   | "presentacion"
@@ -9,7 +9,7 @@ export type EventType =
 
 export type EventFilters = {
   search?: string;
-  type?: EventType;
+  type?: EventCategory;
   dateFrom?: string;
   dateTo?: string;
 };
@@ -25,5 +25,5 @@ export type EventItem = {
   latitude: number;
   longitude: number;
   created_by: string;
-  type: EventType;
+  type: EventCategory;
 };

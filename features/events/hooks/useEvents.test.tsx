@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { ReactNode } from "react";
 import { EventItem } from "../types";
 
+
 /**
  * Feature: Event List Hook
  * As a user
@@ -18,7 +19,7 @@ import { EventItem } from "../types";
  * Then it should call the service and return the events data
  */
 
-// 1. Mock 
+// 1. Mock
 vi.mock("../services/eventService", () => ({
   getEvents: vi.fn(),
 }));
@@ -40,29 +41,26 @@ const createWrapper = () => {
 
 describe("useEvents Hook", () => {
   it("should return a list of events", async () => {
-  
     const mockEvents: EventItem[] = [
       {
         id: "1",
         title: "Presentación de libro",
         created_at: "1",
         description: "El Aleph",
-        date: "1",
+        start_date: "1",
         location_name: "Librería",
         latitude: 1,
         longitude: 2,
         created_by: "Poe",
-        
+        type: "otro",
       },
     ];
     vi.mocked(getEvents).mockResolvedValue(mockEvents);
 
-   
     const { result } = renderHook(() => useEvents(), {
       wrapper: createWrapper(),
     });
 
-   
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.data).toEqual(mockEvents);
   });
