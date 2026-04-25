@@ -2,6 +2,7 @@
 import ReactQueryProvider from "@/shared/providers/ReactQueryProvider";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { Navbar } from "../shared/components/layout/Navbar";
 
 export default function RootLayout({
   children,
@@ -11,8 +12,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
-        <Toaster richColors position="top-right" />
+        <ReactQueryProvider>
+          <Navbar />
+          {children}
+          <Toaster richColors position="top-right" />
+        </ReactQueryProvider>
       </body>
     </html>
   );
