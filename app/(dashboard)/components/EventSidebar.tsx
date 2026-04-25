@@ -55,14 +55,28 @@ export function EventSidebar() {
       {/* DATES */}
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Fechas</label>
-        <input
-          type="date"
-          className="p-2 rounded-md border border-slate-200 text-sm"
-        />
-        <input
-          type="date"
-          className="p-2 rounded-md border border-slate-200 text-sm"
-        />
+      <input
+  type="date"
+  className="p-2 rounded text-black"
+  value={filters.dateFrom || ""}
+  onChange={(e) =>
+    setFilters((prev) => ({
+      ...prev,
+      dateFrom: e.target.value,
+    }))
+  }
+/>
+       <input
+  type="date"
+  className="p-2 rounded text-black"
+  value={filters.dateTo || ""}
+  onChange={(e) =>
+    setFilters((prev) => ({
+      ...prev,
+      dateTo: e.target.value,
+    }))
+  }
+/>
       </div>
 
       {/* ACTIONS */}

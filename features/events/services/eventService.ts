@@ -16,9 +16,13 @@ const to = filters?.dateTo;
   }
 
 if (from && to) {
-  query = query.or(
-    `and(start_date.lte.${to}T23:59:59Z,coalesce(end_date,start_date).gte.${from}T00:00:00Z)`
-  );
+  query = query
+    .lte("start_date", to + "T23:59:59Z")
+    .gte("start_date", from + "T00:00:00Z");
+} else if (from) {
+  query = query.gte("start_date", from + "T00:00:00Z");
+} else if (to) {
+  query = query.lte("start_date", to + "T23:59:59Z");
 }
 
  
