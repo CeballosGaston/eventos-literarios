@@ -1,8 +1,8 @@
 "use client";
 
-import {useFilters} from "../../../features/filters/context/FiltersContext";
+import { useFilters } from "../../../features/filters/context/FiltersContext";
 import { EventCategory } from "@/features/events/types";
-
+import Link from "next/link";
 export function EventSidebar() {
   const { filters, setFilters } = useFilters();
   
@@ -32,15 +32,15 @@ export function EventSidebar() {
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Categorías</label>
         <select
-  className="p-2 rounded text-black"
-  value={filters?.type || ""}
-  onChange={(e) =>
-  setFilters((prev) => ({
-    ...prev,
-    type: (e.target.value || undefined) as EventCategory | undefined,
-  }))
-}
->
+          className="p-2 rounded text-black"
+          value={filters?.type || ""}
+          onChange={(e) =>
+            setFilters((prev) => ({
+              ...prev,
+              type: (e.target.value || undefined) as EventCategory | undefined,
+            }))
+          }
+        >
           <option value="">Todos</option>
           <option value="charla">Charla</option>
           <option value="lectura">Lectura</option>
@@ -55,35 +55,37 @@ export function EventSidebar() {
       {/* DATES */}
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Fechas</label>
-      <input
-  type="date"
-  className="p-2 rounded text-black"
-  value={filters.dateFrom || ""}
-  onChange={(e) =>
-    setFilters((prev) => ({
-      ...prev,
-      dateFrom: e.target.value,
-    }))
-  }
-/>
-       <input
-  type="date"
-  className="p-2 rounded text-black"
-  value={filters.dateTo || ""}
-  onChange={(e) =>
-    setFilters((prev) => ({
-      ...prev,
-      dateTo: e.target.value,
-    }))
-  }
-/>
+        <input
+          type="date"
+          className="p-2 rounded text-black"
+          value={filters.dateFrom || ""}
+          onChange={(e) =>
+            setFilters((prev) => ({
+              ...prev,
+              dateFrom: e.target.value,
+            }))
+          }
+        />
+        <input
+          type="date"
+          className="p-2 rounded text-black"
+          value={filters.dateTo || ""}
+          onChange={(e) =>
+            setFilters((prev) => ({
+              ...prev,
+              dateTo: e.target.value,
+            }))
+          }
+        />
       </div>
 
       {/* ACTIONS */}
       <div className="flex flex-col gap-2">
-        <button className="bg-slate-900 text-white p-2 rounded-md text-sm">
-          Ir a eventos
-        </button>
+        <Link href="/events"  className="bg-slate-900 text-white p-2 rounded-md text-sm block text-center">
+          <button >
+            Ir a eventos
+          </button>
+        </Link>
         <button className="bg-sky-500 text-white p-2 rounded-md text-sm hover:bg-sky-600 transition">
           Ver estadísticas
         </button>
