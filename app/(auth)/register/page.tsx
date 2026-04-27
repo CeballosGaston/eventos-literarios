@@ -6,9 +6,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { BookOpen } from "lucide-react";
 
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import { registerSchema, RegisterInput } from "@/features/auth/schemas/authSchema";
+import {
+  registerSchema,
+  RegisterInput,
+} from "@/features/auth/schemas/authSchema";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -22,11 +31,10 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { email: "", password: "", confirmPassword: "" }
+    defaultValues: {name:"", email: "", password: "", confirmPassword: "" },
   });
 
   const onSubmit = (data: RegisterInput) => {
-   
     signUpMutation.mutate(data);
   };
 
@@ -40,11 +48,26 @@ export default function RegisterPage() {
             </div>
           </div>
           <CardTitle className="text-3xl font-bold">Crear Cuenta</CardTitle>
-          <CardDescription>Únete a la comunidad literaria de BCN</CardDescription>
+          <CardDescription>
+            Únete a la comunidad literaria de BCN
+          </CardDescription>
         </CardHeader>
 
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Nombre</Label>
+              <Input
+                id="name"
+                {...register("name")}
+                placeholder="Tu nombre"
+                className={errors.name ? "border-red-500" : ""}
+              />
+              {errors.name && (
+                <p className="text-xs text-red-500">{errors.name.message}</p>
+              )}
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -53,7 +76,9 @@ export default function RegisterPage() {
                 placeholder="tu@email.com"
                 className={errors.email ? "border-red-500" : ""}
               />
-              {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-xs text-red-500">{errors.email.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -65,7 +90,11 @@ export default function RegisterPage() {
                 placeholder="••••••••"
                 className={errors.password ? "border-red-500" : ""}
               />
-              {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
+              {errors.password && (
+                <p className="text-xs text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -78,18 +107,27 @@ export default function RegisterPage() {
                 className={errors.confirmPassword ? "border-red-500" : ""}
               />
               {errors.confirmPassword && (
-                <p className="text-xs text-red-500">{errors.confirmPassword.message}</p>
+                <p className="text-xs text-red-500">
+                  {errors.confirmPassword.message}
+                </p>
               )}
             </div>
 
-            <Button type="submit" className="w-full" disabled={signUpMutation.isPending}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={signUpMutation.isPending}
+            >
               {signUpMutation.isPending ? "Creando cuenta..." : "Registrarse"}
             </Button>
           </form>
 
           <div className="mt-4 text-center text-sm text-slate-600">
             ¿Ya tienes cuenta?{" "}
-            <Link href="/login" className="text-indigo-600 hover:underline font-medium">
+            <Link
+              href="/login"
+              className="text-indigo-600 hover:underline font-medium"
+            >
               Inicia sesión
             </Link>
           </div>

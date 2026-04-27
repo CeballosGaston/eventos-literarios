@@ -27,7 +27,7 @@ export function useAuth() {
   });
 
   const register = useMutation({
-    mutationFn: ({ email, password }: RegisterInput) => signUp(email, password),
+    mutationFn: ({ email, password, name }: RegisterInput) => signUp(email, password, name),
     onSuccess: async () => {
       await supabase.auth.signOut();
       queryClient.clear();
