@@ -1,12 +1,20 @@
 "use client";
 
-import { useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { EventItem } from "../types";
 import { useCreateEvent } from "../hooks/useCreateEvent";
+import { CATEGORIES_OPTIONS } from "../types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Importarás useUpdateEvent cuando lo hagamos
 
@@ -31,6 +39,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
       title: "",
       description: "",
       start_date: "",
+
       end_date: "",
       location_name: "",
     },
@@ -60,6 +69,34 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
         {errors.title && (
           <p className="text-xs text-red-500">
             {errors.title.message as string}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="category">Categoría</Label>
+        <Controller
+          name="type"
+          control={control}
+          rules={{ required: "La categoría es obligatoria" }}
+          render={({ field }) => (
+            <Select onValueChange={field.onChange} value={field.value}>
+              <SelectTrigger id="category">
+                <SelectValue placeholder="Elige un tipo de evento" />
+              </SelectTrigger>
+              <SelectContent>
+                {CATEGORIES_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
+        {errors.type && (
+          <p className="text-xs text-red-500">
+            {errors.type.message as string}
           </p>
         )}
       </div>

@@ -27,3 +27,13 @@ export type EventItem = {
   created_by: string;
   type: EventCategory;
 };
+
+export const CATEGORIES_OPTIONS: { value: EventCategory; label: string }[] = [
+  { value: "charla", label: "Charla" },
+  { value: "lectura", label: "Lectura" },
+  { value: "presentacion", label: "Presentación de Libro" },
+  { value: "taller", label: "Taller" },
+  { value: "performance", label: "Performance" },
+  { value: "debate", label: "Debate" },
+  { value: "otro", label: "Otro" },
+];
