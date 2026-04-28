@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, MapPin, Pencil, Trash2 } from "lucide-react";
+import { Calendar, MapPin, Pencil, Trash2, Clock } from "lucide-react";
 import { 
   Card, CardContent, CardFooter, CardHeader, CardTitle 
 } from "@/components/ui/card";
@@ -49,12 +49,33 @@ export function EventCard({ event }: EventCardProps) {
             {event.description}
           </p>
         )}
-        <div className="flex items-center gap-2 text-slate-700">
-          <Calendar className="w-4 h-4 text-indigo-600" />
-          <span className="font-medium">
-            {new Date(event.start_date).toLocaleDateString()}
-          </span>
-        </div>
+        <div className="flex items-start gap-2 text-slate-700">
+  <Calendar className="w-4 h-4 mt-1 text-indigo-600" />
+  <div className="flex flex-col">
+    {/* Fecha Principal */}
+    <span className="font-semibold text-sm">
+      {new Date(event.start_date).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })}
+    </span>
+    
+    {/* Rango de Horas */}
+    <span className="text-xs text-slate-500 flex items-center gap-1">
+      <Clock className="w-3 h-3" /> {/* Necesitarás importar Clock de lucide-react */}
+      {new Date(event.start_date).toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      })}
+      {" - "}
+      {new Date(event.end_date).toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit'
+      })}
+    </span>
+  </div>
+</div>
         {event.location_name && (
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-slate-400" />

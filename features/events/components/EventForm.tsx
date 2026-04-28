@@ -1,0 +1,133 @@
+"use client";
+
+import { useForm, useWatch } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { EventItem } from "../types";
+import { useCreateEvent } from "../hooks/useCreateEvent";
+
+// Importarás useUpdateEvent cuando lo hagamos
+
+type EventFormData = Omit<EventItem, "id" | "created_at" | "created_by">;
+
+interface EventFormProps {
+  initialData?: EventItem;
+  onSuccess: () => void;
+}
+
+export function EventForm({ initialData, onSuccess }: EventFormProps) {
+  const createMutation = useCreateEvent();
+  const isEditing = !!initialData;
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<EventFormData>({
+    defaultValues: initialData || {
+      title: "",
+      description: "",
+      start_date: "",
+      end_date: "",
+      location_name: "",
+    },
+  });
+
+  const startDateValue = useWatch({ control, name: "start_date" });
+
+  const onSubmit = (data: EventFormData) => {
+    if (isEditing) {
+      // Aquí irá la lógica de update
+      console.log("Editando...", data);
+    } else {
+      createMutation.mutate(data, {
+        onSuccess: () => onSuccess(),
+      });
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="title">Título del evento</Label>
+        <Input
+          id="title"
+          {...register("title", { required: "El título es obligatorio" })}
+        />
+        {errors.title && (
+          <p className="text-xs text-red-500">
+            {errors.title.message as string}
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="description">Descripción</Label>
+        <Textarea id="description" {...register("description")} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="start_date">Fecha de comienzo</Label>
+          <Input
+            id="start_date"
+            type="datetime-local"
+            {...register("start_date", {
+              required: "La fecha de inicio es obligatoria",
+            })}
+          />
+          {errors.start_date && (
+            <p className="text-xs text-red-500">{errors.start_date.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="end_date">Fecha de cierre</Label>
+          <Input
+            id="end_date"
+            type="datetime-local"
+            {...register("end_date", {
+              required: "La fecha de cierre es obligatoria",
+              validate: (value) => {
+                if (!startDateValue) return true;
+                return (
+                  new Date(value) > new Date(startDateValue) ||
+                  "La fecha de cierre debe ser posterior al inicio"
+                );
+              },
+            })}
+          />
+          {errors.end_date && (
+            <p className="text-xs text-red-500">{errors.end_date.message}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="location_name">Lugar</Label>
+          <Input
+            id="location_name"
+            {...register("location_name", {
+              required: "El lugar es obligatorio",
+            })}
+          />
+          {errors.location_name && (
+            <p className="text-xs text-red-500">
+              {errors.location_name.message}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={createMutation.isPending}
+      >
+        {isEditing ? "Guardar cambios" : "Crear Evento"}
+      </Button>
+    </form>
+  );
+}
