@@ -17,10 +17,9 @@ export function useUser() {
 
       if (error) throw error; 
 
-      // Si hay auth pero no hay fila en la tabla 'users', 
-      // podrías devolver un objeto temporal para que la UI no rompa
+     
       return data || { id: user.id, email: user.email, name: "Cargando perfil..." };
     },
-    staleTime: 1000 * 60 * 5, // 5 minutos de caché está bien
+    staleTime: 1000 * 60 * 5,
   });
 }
