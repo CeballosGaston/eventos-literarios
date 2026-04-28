@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { EventItem } from "../types";
-import { useCreateEvent } from "../hooks/useCreateEvent";
+import { useCreateEvent, useUpdateEvent } from "../hooks/useCreateEvent";
 import { CATEGORIES_OPTIONS } from "../types";
 import {
   Select,
@@ -27,7 +27,24 @@ interface EventFormProps {
 
 export function EventForm({ initialData, onSuccess }: EventFormProps) {
   const createMutation = useCreateEvent();
+  const { mutate: updateEvent } = useUpdateEvent();
+
   const isEditing = !!initialData;
+const formatDBDateForInput = (dateString: string) => {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+
+  // Extraemos cada parte de la fecha local
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  // Construimos el formato YYYY-MM-DDTHH:mm exacto que pide el input
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
 
   const {
     register,
@@ -35,11 +52,14 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
     control,
     formState: { errors },
   } = useForm<EventFormData>({
-    defaultValues: initialData || {
+    defaultValues: initialData? {
+        ...initialData,
+        start_date: formatDBDateForInput(initialData.start_date),
+        end_date: formatDBDateForInput(initialData.end_date),
+      } : {
       title: "",
       description: "",
       start_date: "",
-
       end_date: "",
       location_name: "",
     },
@@ -48,9 +68,14 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
   const startDateValue = useWatch({ control, name: "start_date" });
 
   const onSubmit = (data: EventFormData) => {
+    const formattedData = {
+    ...data,
+    start_date: new Date(data.start_date).toISOString(),
+    end_date: new Date(data.end_date).toISOString(),
+  };
     if (isEditing) {
-      // Aquí irá la lógica de update
-      console.log("Editando...", data);
+    updateEvent({ ...formattedData, id: initialData.id }, { onSuccess });
+      
     } else {
       createMutation.mutate(data, {
         onSuccess: () => onSuccess(),

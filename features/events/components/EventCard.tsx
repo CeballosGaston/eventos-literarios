@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { Calendar, MapPin, Pencil, Trash2, Clock } from "lucide-react";
 import { 
   Card, CardContent, CardFooter, CardHeader, CardTitle 
@@ -16,9 +16,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { useUser } from "@/features/auth/hooks/useUser";
 import { useDeleteEvent } from "../hooks/useDeleteEvent";
 import { EventItem } from "../types";
+import {EventForm} from"../components/EventForm";
 
 interface EventCardProps {
   event: EventItem; 
@@ -27,6 +36,7 @@ interface EventCardProps {
 export function EventCard({ event }: EventCardProps) {
   const { data: currentUser } = useUser();
   const deleteEventMutation = useDeleteEvent();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   
   const isOwner = currentUser?.id === event.created_by;
 
@@ -87,9 +97,27 @@ export function EventCard({ event }: EventCardProps) {
       {isOwner && (
         <CardFooter className="bg-slate-50/50 border-t p-4 flex justify-end gap-2 mt-auto">
           {/* Botón Editar (Lógica que haremos luego) */}
-          <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-            <Pencil className="w-4 h-4" />
-          </Button>
+
+
+
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+                <Pencil className="w-4 h-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Editar Evento</DialogTitle>
+              </DialogHeader>
+              
+              {/* Le pasamos el evento actual y la función para cerrar el modal */}
+              <EventForm 
+                initialData={event} 
+                onSuccess={() => setIsEditDialogOpen(false)} 
+              />
+            </DialogContent>
+          </Dialog>
 
          
           <AlertDialog>
