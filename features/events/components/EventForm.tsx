@@ -29,22 +29,21 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
   const createMutation = useCreateEvent();
   const { mutate: updateEvent } = useUpdateEvent();
 
-  const isEditing = !!initialData;
-const formatDBDateForInput = (dateString: string) => {
-  if (!dateString) return "";
+  const isEditing = !!initialData?.id;
 
-  const date = new Date(dateString);
+  const formatDBDateForInput = (dateString: string) => {
+    if (!dateString) return "";
 
-  // Extraemos cada parte de la fecha local
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
+    const date = new Date(dateString);
 
-  // Construimos el formato YYYY-MM-DDTHH:mm exacto que pide el input
-  return `${year}-${month}-${day}T${hours}:${minutes}`;
-};
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
 
   const {
     register,
@@ -52,39 +51,49 @@ const formatDBDateForInput = (dateString: string) => {
     control,
     formState: { errors },
   } = useForm<EventFormData>({
-    defaultValues: initialData? {
-        ...initialData,
-        start_date: formatDBDateForInput(initialData.start_date),
-        end_date: formatDBDateForInput(initialData.end_date),
-      } : {
-      title: "",
-      description: "",
-      start_date: "",
-      end_date: "",
-      location_name: "",
-    },
+    defaultValues: initialData
+      ? {
+          ...initialData,
+          start_date: formatDBDateForInput(initialData.start_date),
+          end_date: initialData.end_date
+            ? formatDBDateForInput(initialData.end_date)
+            : "",
+        }
+      : {
+          title: "",
+          description: "",
+          start_date: "",
+          end_date: "",
+          location_name: "",
+        },
   });
 
   const startDateValue = useWatch({ control, name: "start_date" });
 
   const onSubmit = (data: EventFormData) => {
     const formattedData = {
-    ...data,
-    start_date: new Date(data.start_date).toISOString(),
-    end_date: new Date(data.end_date).toISOString(),
-  };
+      ...data,
+      start_date: new Date(data.start_date).toISOString(),
+      end_date: data.end_date
+        ? new Date(data.end_date).toISOString()
+        : new Date(data.start_date).toISOString(),
+    };
     if (isEditing) {
-    updateEvent({ ...formattedData, id: initialData.id }, { onSuccess });
-      
+      updateEvent({ ...formattedData, id: initialData!.id }, { onSuccess });
     } else {
-      createMutation.mutate(data, {
+      createMutation.mutate(formattedData, {
         onSuccess: () => onSuccess(),
       });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form
+      onSubmit={handleSubmit(onSubmit, (errors) =>
+        console.log("Errores:", errors),
+      )}
+      className="space-y-4"
+    >
       <div className="space-y-2">
         <Label htmlFor="title">Título del evento</Label>
         <Input
