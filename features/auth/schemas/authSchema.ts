@@ -12,6 +12,7 @@ export const loginSchema = z.object({
 
 export const registerSchema = loginSchema
   .extend({
+    name: z.string().min(2, "El nombre es obligatorio"),
     password: passwordSchema,
     confirmPassword: z.string(),
   })

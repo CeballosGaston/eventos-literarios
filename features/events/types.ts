@@ -20,10 +20,20 @@ export type EventItem = {
   title: string;
   description: string;
   start_date: string;
-  end_date?: string;
+  end_date: string;
   location_name: string;
   latitude: number;
   longitude: number;
   created_by: string;
   type: EventCategory;
 };
+
+export const CATEGORIES_OPTIONS: { value: EventCategory; label: string }[] = [
+  { value: "charla", label: "Charla" },
+  { value: "lectura", label: "Lectura" },
+  { value: "presentacion", label: "Presentación de Libro" },
+  { value: "taller", label: "Taller" },
+  { value: "performance", label: "Performance" },
+  { value: "debate", label: "Debate" },
+  { value: "otro", label: "Otro" },
+];

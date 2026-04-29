@@ -3,9 +3,19 @@
 import { useFilters } from "../../../features/filters/context/FiltersContext";
 import { EventCategory } from "@/features/events/types";
 import Link from "next/link";
+import { useDateFilterValidation } from "@/features/filters/hooks/useDateFilterValidation";
+
+
+
 export function EventSidebar() {
-  const { filters, setFilters } = useFilters();
-  
+const { filters, setFilters } = useFilters();
+
+const { error, setDateFrom, setDateTo } =
+  useDateFilterValidation({
+    dateFrom: filters.dateFrom,
+    dateTo: filters.dateTo,
+    setFilters,
+  });
 
   return (
     <aside className="w-72 bg-white border-r border-slate-200 p-4 flex flex-col gap-6">
@@ -55,36 +65,31 @@ export function EventSidebar() {
       {/* DATES */}
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Fechas</label>
-        <input
-          type="date"
-          className="p-2 rounded text-black"
-          value={filters.dateFrom || ""}
-          onChange={(e) =>
-            setFilters((prev) => ({
-              ...prev,
-              dateFrom: e.target.value,
-            }))
-          }
-        />
-        <input
-          type="date"
-          className="p-2 rounded text-black"
-          value={filters.dateTo || ""}
-          onChange={(e) =>
-            setFilters((prev) => ({
-              ...prev,
-              dateTo: e.target.value,
-            }))
-          }
-        />
+  <input
+  type="date"
+  value={filters.dateFrom || ""}
+  onChange={(e) => setDateFrom(e.target.value || undefined)}
+/>
+   <input
+  type="date"
+  value={filters.dateTo || ""}
+  onChange={(e) => setDateTo(e.target.value || undefined)}
+/>
+
+{error && (
+  <p className="text-red-500 text-sm">
+    {error}
+  </p>
+)}
       </div>
 
       {/* ACTIONS */}
       <div className="flex flex-col gap-2">
-        <Link href="/events"  className="bg-slate-900 text-white p-2 rounded-md text-sm block text-center">
-          <button >
-            Ir a eventos
-          </button>
+        <Link
+          href="/events"
+          className="bg-slate-900 text-white p-2 rounded-md text-sm block text-center"
+        >
+          <button>Ir a eventos</button>
         </Link>
         <button className="bg-sky-500 text-white p-2 rounded-md text-sm hover:bg-sky-600 transition">
           Ver estadísticas

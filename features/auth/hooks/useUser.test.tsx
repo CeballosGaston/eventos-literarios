@@ -11,6 +11,11 @@ vi.mock("@/shared/lib/supabaseClient", () => ({
     auth: {
       getUser: vi.fn(),
     },
+    from: vi.fn(() => ({
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn(),
+    })),
   },
 }));
 
@@ -39,28 +44,41 @@ describe("useUser Hook Unit Tests", () => {
    */
 
   it("should return user data when authenticated", async () => {
-    const mockUser = {
-      id: "123",
+    const mockAuthUser = { id: "12-34", email: "test@test.com" } as User;
+    const mockDbUser = {
+      id: "12-34",
       email: "test@test.com",
-      app_metadata: {},
-      user_metadata: {},
-      aud: "authenticated",
-      created_at: "",
-    } as User;
+      name: "Test User",
+    };
 
     vi.mocked(supabase.auth.getUser).mockResolvedValue({
-      data: { user: mockUser },
+      data: { user: mockAuthUser },
       error: null,
     });
+
+    const chainMock = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: mockDbUser, error: null }),
+    };
+
+    vi.mocked(supabase.from).mockReturnValue(
+      chainMock as unknown as ReturnType<typeof supabase.from>,
+    );
 
     const { result } = renderHook(() => useUser(), {
       wrapper: createWrapper(),
     });
 
-    await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(result.current.data).toEqual(mockUser);
-  });
+    await waitFor(
+      () => {
+        expect(result.current.isSuccess).toBe(true);
+      },
+      { timeout: 2000 },
+    );
 
+    expect(result.current.data).toEqual(mockDbUser);
+  });
   /**
    * Scenario: No user / Error in Supabase
    * Given an error or no session in Supabase

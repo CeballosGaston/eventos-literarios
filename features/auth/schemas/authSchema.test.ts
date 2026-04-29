@@ -66,6 +66,7 @@ describe('Authentication Schemas Unit Tests', () => {
      */
     it('should fail if passwords do not match', () => {
       const result = registerSchema.safeParse({
+        name: 'name',
         email: 'test@test.com',
         password: 'password123',
         confirmPassword: 'differentPassword'
@@ -86,6 +87,7 @@ describe('Authentication Schemas Unit Tests', () => {
      */
     it('should pass if all data is valid and passwords match', () => {
       const result = registerSchema.safeParse({
+        name: 'name',
         email: 'valid@example.com',
         password: 'securePassword123',
         confirmPassword: 'securePassword123'
