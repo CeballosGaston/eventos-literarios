@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, useWatch, Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,7 +16,8 @@ import {
 } from "@/components/ui/select";
 import { useState, useRef } from "react";
 
-// --- TIPADO ESTRICTO ---
+
+
 interface PhotonFeature {
   geometry: {
     coordinates: [number, number];
@@ -93,7 +94,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
         },
   });
 
-  const startDateValue = useWatch({ control, name: "start_date" });
+
 
   const handleSearchAddress = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -101,7 +102,6 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
     const query = e.target.value;
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
 
-    // Bajamos a 3 letras para probar si es un tema de longitud
     if (query.length < 3) {
       setSuggestions([]);
       return;
@@ -110,7 +110,6 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
     searchTimeout.current = setTimeout(async () => {
       setIsSearching(true);
       try {
-        // URL simplificada al máximo
         const response = await fetch(
           `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=10`,
         );
@@ -121,7 +120,6 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
             (f: PhotonFeature) => {
               const p = f.properties;
 
-              // Lógica de label a prueba de fallos: si no hay calle, usa el nombre, si no, la ciudad
               const label = p.street
                 ? `${p.street}${p.housenumber ? " " + p.housenumber : ""}, ${p.city || ""}`
                 : p.name || p.city || "Ubicación encontrada";
@@ -258,7 +256,6 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
             <ul
               className="fixed z-[9999] bg-white border-2 border-black shadow-2xl rounded-md max-h-60 overflow-auto w-[var(--input-width)]"
               style={{
-                // Esto asegura que la lista flote sobre todo, incluso fuera del Modal
                 width: "300px",
                 backgroundColor: "white",
                 color: "black",
