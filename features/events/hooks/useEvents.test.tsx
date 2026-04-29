@@ -48,6 +48,7 @@ describe("useEvents Hook", () => {
         created_at: "1",
         description: "El Aleph",
         start_date: "1",
+        end_date: "2",
         location_name: "Librería",
         latitude: 1,
         longitude: 2,

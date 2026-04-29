@@ -20,7 +20,10 @@ export default defineConfig({
         "**/ReactQueryProvider.tsx",
         "**/*.d.ts",
         "**/supabaseClient.ts",
-        "**/Navbar.tsx"
+        "**/Navbar.tsx",
+        "**/EventCard.tsx",
+        "**/EventForm.tsx",
+        "features/events/types.ts",
       ],
     },
     alias: {
