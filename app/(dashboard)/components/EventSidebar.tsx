@@ -5,13 +5,10 @@ import { EventCategory } from "@/features/events/types";
 import Link from "next/link";
 import { useDateFilterValidation } from "@/features/filters/hooks/useDateFilterValidation";
 
-
-
 export function EventSidebar() {
-const { filters, setFilters } = useFilters();
+  const { filters, setFilters } = useFilters();
 
-const { error, setDateFrom, setDateTo } =
-  useDateFilterValidation({
+  const { error, setDateFrom, setDateTo } = useDateFilterValidation({
     dateFrom: filters.dateFrom,
     dateTo: filters.dateTo,
     setFilters,
@@ -65,22 +62,18 @@ const { error, setDateFrom, setDateTo } =
       {/* DATES */}
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Fechas</label>
-  <input
-  type="date"
-  value={filters.dateFrom || ""}
-  onChange={(e) => setDateFrom(e.target.value || undefined)}
-/>
-   <input
-  type="date"
-  value={filters.dateTo || ""}
-  onChange={(e) => setDateTo(e.target.value || undefined)}
-/>
+        <input
+          type="date"
+          value={filters.dateFrom || ""}
+          onChange={(e) => setDateFrom(e.target.value || undefined)}
+        />
+        <input
+          type="date"
+          value={filters.dateTo || ""}
+          onChange={(e) => setDateTo(e.target.value || undefined)}
+        />
 
-{error && (
-  <p className="text-red-500 text-sm">
-    {error}
-  </p>
-)}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
       </div>
 
       {/* ACTIONS */}
@@ -91,9 +84,13 @@ const { error, setDateFrom, setDateTo } =
         >
           <button>Ir a eventos</button>
         </Link>
-        <button className="bg-sky-500 text-white p-2 rounded-md text-sm hover:bg-sky-600 transition">
-          Ver estadísticas
-        </button>
+
+        <Link
+          href="/stats"
+          className="bg-sky-500 text-white p-2 rounded-md text-sm hover:bg-sky-600 transition text-center"
+        >
+          <button> Ver estadísticas </button>
+        </Link>
       </div>
     </aside>
   );

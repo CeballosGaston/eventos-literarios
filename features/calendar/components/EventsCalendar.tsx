@@ -1,60 +1,30 @@
-// 1. Imports (los que ya tienes)
+"use client";
+
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/shared/lib/supabaseClient";
-import { useState } from "react";
 import { EventItem } from "../../events/types";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../../../components/ui/dialog";
-import { EventForm } from "@/features/events/components/EventForm";
 
-export function EventCalendar() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
-  const [initialDate, setInitialDate] = useState<string | null>(null);
+interface EventCalendarProps {
+  events: EventItem[];
+  onDateClick: (date: string) => void;
+  onEventClick: (event: EventItem) => void;
+}
 
-  const {
-    data: events,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["events"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("events").select("*");
-      if (error) throw error;
-      return data as EventItem[];
-    },
-  });
-
+export function EventCalendar({
+  events,
+  onDateClick,
+  onEventClick,
+}: EventCalendarProps) {
   const handleDateClick = (arg: DateClickArg) => {
-    setSelectedEvent(null);
-    setInitialDate(`${arg.dateStr}T09:00`);
-    setIsModalOpen(true);
+    onDateClick(`${arg.dateStr}T09:00`);
   };
 
   const handleEventClick = (info: EventClickArg) => {
     const eventData = info.event.extendedProps as EventItem;
-    setSelectedEvent(eventData);
-    setInitialDate(null);
-    setIsModalOpen(true);
+    onEventClick(eventData);
   };
-
-  const handleSuccess = () => {
-    console.log("¡Evento guardado con éxito!");
-    setIsModalOpen(false);
-    refetch();
-  };
-
-  if (isLoading) {
-    return <div className="p-10 text-center">Cargando...</div>;
-  }
 
   return (
     <div className="w-full">
@@ -72,7 +42,7 @@ export function EventCalendar() {
           }}
           dayMaxEvents={2}
           eventDisplay="block"
-          events={events?.map((e) => ({
+          events={events.map((e) => ({
             id: e.id,
             title: e.title,
             start: e.start_date,
@@ -86,29 +56,6 @@ export function EventCalendar() {
           eventClick={handleEventClick}
         />
       </div>
-
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>
-              {selectedEvent
-                ? `Editar: ${selectedEvent.title}`
-                : "Crear evento"}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <EventForm
-              initialData={
-                selectedEvent ||
-                (initialDate
-                  ? ({ start_date: initialDate } as EventItem)
-                  : undefined)
-              }
-              onSuccess={handleSuccess}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
