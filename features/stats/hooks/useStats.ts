@@ -1,9 +1,12 @@
 import { useEvents } from "../../events/hooks/useEvents";
+const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
+
 
 
 interface CategoryChartData {
   name: string;
   value: number;
+  fill: string;
 }
 
 interface MonthlyChartData {
@@ -22,7 +25,7 @@ export function useStats() {
     if (existing) {
       existing.value++;
     } else {
-      acc.push({ name: categoryName, value: 1 });
+      acc.push({ name: categoryName, value: 1, fill: COLORS[acc.length % COLORS.length] });
     }
     return acc;
   }, []);

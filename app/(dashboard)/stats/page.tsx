@@ -56,6 +56,7 @@ export default function StatsPage() {
                 outerRadius={80}
                 paddingAngle={5}
                 dataKey="value"
+                nameKey="name"
               >
                 {categoryData.map((_, index) => (
                   <Bar
@@ -64,7 +65,7 @@ export default function StatsPage() {
                   />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}/>
             </PieChart>
           </ResponsiveContainer>
         </div>
