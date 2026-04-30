@@ -114,6 +114,7 @@ export default function RegisterPage() {
             </div>
 
             <Button
+            aria-label="account-creator"
               type="submit"
               className="w-full"
               disabled={signUpMutation.isPending}

@@ -24,6 +24,8 @@ export default defineConfig({
         "**/EventCard.tsx",
         "**/EventForm.tsx",
         "features/events/types.ts",
+        "**/EventsCalendar.tsx",
+        "**/EventsMap.tsx",
       ],
     },
     alias: {

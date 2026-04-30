@@ -102,7 +102,7 @@ export function EventCard({ event }: EventCardProps) {
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+              <Button aria-label="pencil-edit" variant="outline" size="sm" className="h-8 w-8 p-0">
                 <Pencil className="w-4 h-4" />
               </Button>
             </DialogTrigger>
@@ -123,6 +123,7 @@ export function EventCard({ event }: EventCardProps) {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button 
+              aria-label="delete"
                 variant="destructive" 
                 size="sm" 
                 className="h-8 w-8 p-0"
