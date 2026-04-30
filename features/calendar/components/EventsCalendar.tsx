@@ -5,12 +5,15 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { EventClickArg } from "@fullcalendar/core";
 import { EventItem } from "../../events/types";
+import { useEffect } from "react";
 
 interface EventCalendarProps {
   events: EventItem[];
   onDateClick: (date: string) => void;
   onEventClick: (event: EventItem) => void;
 }
+
+// Se ejecuta cuando los eventos cargan
 
 export function EventCalendar({
   events,
@@ -25,6 +28,16 @@ export function EventCalendar({
     const eventData = info.event.extendedProps as EventItem;
     onEventClick(eventData);
   };
+
+  useEffect(() => {
+    const moreLinks = document.querySelectorAll(".fc-more-link");
+    moreLinks.forEach((link) => {
+      link.setAttribute("role", "button");
+      if (!link.getAttribute("aria-controls")) {
+        link.removeAttribute("aria-controls");
+      }
+    });
+  }, [events]);
 
   return (
     <div className="w-full">

@@ -63,11 +63,13 @@ export function EventSidebar() {
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Fechas</label>
         <input
+          aria-label="Fecha de inicio para filtrar eventos"
           type="date"
           value={filters.dateFrom || ""}
           onChange={(e) => setDateFrom(e.target.value || undefined)}
         />
         <input
+          aria-label="Fecha de finalización para filtrar eventos"
           type="date"
           value={filters.dateTo || ""}
           onChange={(e) => setDateTo(e.target.value || undefined)}
