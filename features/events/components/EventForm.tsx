@@ -16,8 +16,6 @@ import {
 } from "@/components/ui/select";
 import { useState, useRef } from "react";
 
-
-
 interface PhotonFeature {
   geometry: {
     coordinates: [number, number];
@@ -93,8 +91,6 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
           location_name: "",
         },
   });
-
-
 
   const handleSearchAddress = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -278,7 +274,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
         </div>
 
         {isSearching && (
-          <p className="text-[10px] text-slate-400 animate-pulse mt-1">
+          <p className="text-[10px] text-slate-500 animate-pulse mt-1">
             Buscando ubicación...
           </p>
         )}
@@ -290,6 +286,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
       </div>
 
       <Button
+      aria-label="submit"
         type="submit"
         className="w-full"
         disabled={createMutation.isPending}

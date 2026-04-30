@@ -82,14 +82,14 @@ export function EventSidebar() {
           href="/events"
           className="bg-slate-900 text-white p-2 rounded-md text-sm block text-center"
         >
-          <button>Ir a eventos</button>
+          <button aria-label="go-to-events">Ir a eventos</button>
         </Link>
 
         <Link
           href="/stats"
           className="bg-sky-500 text-white p-2 rounded-md text-sm hover:bg-sky-600 transition text-center"
         >
-          <button> Ver estadísticas </button>
+          <button aria-label="see-stats"> Ver estadísticas </button>
         </Link>
       </div>
     </aside>

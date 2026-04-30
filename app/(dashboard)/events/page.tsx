@@ -29,7 +29,7 @@ export default function DashboardPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" asChild>
+              <Button aria-label="come-back" variant="ghost" size="sm" asChild>
                 <Link href="/">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   <span className="hidden sm:inline">Volver</span>
@@ -43,7 +43,7 @@ export default function DashboardPage() {
             {/* Botón para abrir el futuro formulario de creación */}
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <Button size="sm" className="gap-2">
+                <Button aria-label="new-event" size="sm" className="gap-2">
                   <Plus className="w-4 h-4" />
                   <span>Nuevo Evento</span>
                 </Button>

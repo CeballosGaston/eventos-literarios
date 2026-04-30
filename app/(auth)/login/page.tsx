@@ -91,6 +91,7 @@ export default function LoginPage() {
             </div>
 
             <Button
+            aria-label="enter-button"
               type="submit"
               className="w-full"
               disabled={loginMutation.isPending}

@@ -12,19 +12,18 @@ export function Navbar() {
 
   return (
     <nav className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
-   
-    <div className="w-full px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          
-      
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link
+            href="/"
+            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          >
             <div className="bg-indigo-600 p-1.5 rounded-lg">
               <BookOpen className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-xl tracking-tight">LitEvents</span>
           </Link>
 
-       
           <div className="flex items-center gap-4">
             {isLoading ? (
               <div className="h-8 w-24 bg-slate-200 animate-pulse rounded-md" />
@@ -34,9 +33,10 @@ export function Navbar() {
                   <UserIcon className="w-4 h-4" />
                   <span>{user.name}</span>
                 </div>
-                
-                <Button 
-                  variant="outline" 
+
+                <Button
+                  aria-label="log-out"
+                  variant="outline"
                   size="sm"
                   onClick={() => logout.mutate()}
                   disabled={logout.isPending}
@@ -48,16 +48,19 @@ export function Navbar() {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Button variant="ghost" asChild>
+                <Button aria-label="enter" variant="ghost" asChild>
                   <Link href="/login">Entrar</Link>
                 </Button>
-                <Button asChild className="bg-indigo-600 hover:bg-indigo-700">
+                <Button
+                  aria-label="register"
+                  asChild
+                  className="bg-indigo-600 hover:bg-indigo-700"
+                >
                   <Link href="/register">Registrarse</Link>
                 </Button>
               </div>
             )}
           </div>
-
         </div>
       </div>
     </nav>
