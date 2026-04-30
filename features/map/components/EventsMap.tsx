@@ -1,5 +1,6 @@
 "use client";
 
+
 import {
   MapContainer,
   TileLayer,
@@ -11,6 +12,8 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { EventItem } from "../../events/types";
 import { memo } from "react";
+
+
 
 const icon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",

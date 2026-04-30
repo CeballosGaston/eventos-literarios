@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { EventCalendar } from "@/features/calendar/components/EventsCalendar";
-import { EventsMap } from "@/features/map/components/EventsMap";
+// import { EventsMap } from "@/features/map/components/EventsMap";
 import { useEvents } from "@/features/events/hooks/useEvents";
 import { EventItem } from "@/features/events/types";
 import { EventForm } from "@/features/events/components/EventForm";
@@ -12,6 +12,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
+import dynamic from "next/dynamic";
+
+const EventsMap = dynamic(
+  () => import("@/features/map/components/EventsMap").then(m => m.EventsMap),
+  { ssr: false }
+);
 
 export default function DashboardPage() {
   const { data: events = [], isLoading, refetch } = useEvents();
