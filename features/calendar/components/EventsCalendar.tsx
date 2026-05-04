@@ -13,7 +13,6 @@ interface EventCalendarProps {
   onEventClick: (event: EventItem) => void;
 }
 
-// Se ejecuta cuando los eventos cargan
 
 export function EventCalendar({
   events,

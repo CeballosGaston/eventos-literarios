@@ -16,9 +16,9 @@ export function EventSidebar() {
 
   return (
     <aside className="w-72 bg-white border-r border-slate-200 p-4 flex flex-col gap-6">
-      {/* HEADER */}
+   
 
-      {/* SEARCH */}
+   
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Buscar</label>
         <input
@@ -35,7 +35,7 @@ export function EventSidebar() {
         />
       </div>
 
-      {/* TYPE */}
+    
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Categorías</label>
         <select
@@ -59,7 +59,7 @@ export function EventSidebar() {
         </select>
       </div>
 
-      {/* DATES */}
+     
       <div className="flex flex-col gap-2">
         <label className="text-m font-bold text-sky-600">Fechas</label>
         <input
@@ -78,7 +78,7 @@ export function EventSidebar() {
         {error && <p className="text-red-500 text-sm">{error}</p>}
       </div>
 
-      {/* ACTIONS */}
+    
       <div className="flex flex-col gap-2">
         <Link
           href="/events"

@@ -152,6 +152,7 @@ describe("useAuth Hook Unit Tests", () => {
 
     result.current.register.mutate({
       email: "test@test.com",
+      name: "name",
       password: "password123",
       confirmPassword: "password123",
     });
@@ -180,6 +181,7 @@ describe("useAuth Hook Unit Tests", () => {
     });
     result.current.register.mutate({
       email: "new@test.com",
+      name: "name",
       password: "password123",
       confirmPassword: "password123",
     });

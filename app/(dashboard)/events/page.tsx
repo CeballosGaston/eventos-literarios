@@ -24,7 +24,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
+    
       <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -40,7 +40,7 @@ export default function DashboardPage() {
               </h1>
             </div>
 
-            {/* Botón para abrir el futuro formulario de creación */}
+           
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <Button aria-label="new-event" size="sm" className="gap-2">
@@ -53,7 +53,7 @@ export default function DashboardPage() {
                   <DialogTitle>Crear Nuevo Evento</DialogTitle>
                 </DialogHeader>
 
-                {/* Le pasamos onSuccess para que cierre el modal al terminar */}
+               
                 <EventForm onSuccess={() => setOpen(false)} />
               </DialogContent>
             </Dialog>

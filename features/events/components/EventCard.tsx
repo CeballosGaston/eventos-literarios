@@ -71,9 +71,9 @@ export function EventCard({ event }: EventCardProps) {
       })}
     </span>
     
-    {/* Rango de Horas */}
+    
     <span className="text-xs text-slate-500 flex items-center gap-1">
-      <Clock className="w-3 h-3" /> {/* Necesitarás importar Clock de lucide-react */}
+      <Clock className="w-3 h-3" /> 
       {new Date(event.start_date).toLocaleTimeString('es-ES', {
         hour: '2-digit',
         minute: '2-digit'
@@ -96,7 +96,7 @@ export function EventCard({ event }: EventCardProps) {
 
       {isOwner && (
         <CardFooter className="bg-slate-50/50 border-t p-4 flex justify-end gap-2 mt-auto">
-          {/* Botón Editar (Lógica que haremos luego) */}
+        
 
 
 
@@ -111,7 +111,7 @@ export function EventCard({ event }: EventCardProps) {
                 <DialogTitle>Editar Evento</DialogTitle>
               </DialogHeader>
               
-              {/* Le pasamos el evento actual y la función para cerrar el modal */}
+            
               <EventForm 
                 initialData={event} 
                 onSuccess={() => setIsEditDialogOpen(false)} 

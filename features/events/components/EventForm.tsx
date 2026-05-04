@@ -168,7 +168,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      {/* Título */}
+   
       <div className="space-y-2">
         <Label htmlFor="title">Título del evento</Label>
         <Input
@@ -180,7 +180,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
         )}
       </div>
 
-      {/* Categoría */}
+   
       <div className="space-y-2">
         <Label htmlFor="category">Categoría</Label>
         <Controller
@@ -204,13 +204,13 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
         />
       </div>
 
-      {/* Descripción */}
+    
       <div className="space-y-2">
         <Label htmlFor="description">Descripción</Label>
         <Textarea id="description" {...register("description")} />
       </div>
 
-      {/* Fechas */}
+     
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="start_date">Fecha de comienzo</Label>
@@ -230,7 +230,7 @@ export function EventForm({ initialData, onSuccess }: EventFormProps) {
         </div>
       </div>
 
-      {/* LUGAR - El buscador corregido */}
+   
       <div className="space-y-2 relative">
         <Label htmlFor="location_name">Lugar</Label>
         <div className="relative">

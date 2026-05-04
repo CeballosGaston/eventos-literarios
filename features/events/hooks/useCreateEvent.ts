@@ -38,16 +38,16 @@ export function useCreateEvent() {
 }
 
 
-// En tu archivo de hooks/servicios
+
 export const useUpdateEvent = () => {
   const queryClient = useQueryClient();
 
-  // Aquí le decimos: acepta el ID y CUALQUIER cosa de EventItem (pero opcional)
+  
   return useMutation({
     mutationFn: async (event: Partial<EventItem> & { id: string }) => {
       const { data, error } = await supabase
         .from("events")
-        .update(event) // Supabase es inteligente y solo actualizará los campos que le pases
+        .update(event) 
         .eq("id", event.id)
         .select()
         .single();
